@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from tensorflow_text import SentencepieceTokenizer
 import tensorflow_hub as hub
 from sklearn.metrics import pairwise
 from typing import List, Tuple
