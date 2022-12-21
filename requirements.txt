@@ -1,0 +1,8 @@
+tensorflow==2.11.0
+Flask==2.2.2
+flask_cors==3.0.10
+nltk==3.8
+numpy==1.24.0
+pandas==1.5.2
+scikit_learn==1.2.0
+tensorflow_hub==0.12.0
