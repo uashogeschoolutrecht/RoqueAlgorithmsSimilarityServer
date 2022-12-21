@@ -16,7 +16,7 @@ On your profile your can see your username, copy or remember it! It will be alot
 3. Then a list of options popup, you need to click the one regarding the **time based password**.
 4. Using an authenticator app set up the time based password.
 5. After that you need to set up your **public ssh key**. 
-   1. In a terminal enter the command `ssh-keygen`.
+   1. In a terminal enter the command   `ssh-keygen`.
    2. After that you will get a prompt to where to store the keys, the default is fine, then press enter.
    3. After that you need to enter a password.
 6. When you have generated your ssh keys, go to the location you have given.
@@ -40,3 +40,16 @@ Host <Name of your ssh connection>
 6. Click on the name of your ssh connection.
 7. Input your given password for the ssh key.
 
+### Now you need to clone the github repo
+1. Make a folder for your code
+```commandline
+mkdir <name-of-folder>
+```
+2. Step in to the folder
+```commandline
+cd <name-of-folder>
+```
+2. Enter the command
+```commandline
+git clone <url-of-the-github-repo>
+```
