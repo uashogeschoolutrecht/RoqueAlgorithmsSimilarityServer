@@ -1,5 +1,5 @@
 import model
-
+import json
 from flask import Flask, request
 from flask_cors import CORS
 
@@ -29,18 +29,17 @@ def get_similarity():
     original_article = {"article": request.form["original_article"],
                         "language": request.form["original_language"] if request.form[
                                                                              "original_language"] != "UNKOWN" else 'dutch'}
-    found_articles = [
-        {
-            "article": article.get("article"),
-            "language": article.get("language") if article.get("language") and article.get("language") != "UNKNOWN" else "dutch",
-            "url": article.get("url")
-        } for article in request.form["found_articles"]]
-
-
+    found_articles = []
+    for article in json.loads(request.form.get("found_articles")):
+      found_articles.append({
+            "article": article["article"],
+            "language": article["language"] if article["language"] and article["language"] != "UNKNOWN" else "dutch",
+            "url": article["url"]
+        })
+    
     similarities = model.get_similarities(request.form["type"], original_article, found_articles)
 
-    # 
-    return dict({url: str(sim) for url, sim in similarities})
+    return dict({"similarities" :similarities})
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0")

@@ -38,36 +38,25 @@ def get_similarities(simtype: str, original_article: dict, found_articles: List[
     original_article_cleaned = normalize_corpus(original_article["article"], stopwords_removal=False,
                                                 lan=original_article["language"],
                                                 stemming=False, remove_special_characters=True)
-    # normalize the corpus of the found articles while also saving the language and url of each article (List[Tuple[cleaned article, lang article, url article]])
-    found_articles_cleaned = [(normalize_corpus(article["article"], stopwords_removal=False, lan=article["language"],
-                                             stemming=False, remove_special_characters=True), article["language"], article["url"])
-                                             for article in found_articles]
-
-    # get the url's from the articles
-    articles_url = [url for _, _, url in found_articles_cleaned]
-
-    # split the articles into sentences
     split_original_article = split_text(original_article_cleaned, original_article["language"])
-    split_found_articles = [split_text(article[0], article[1]) for article in found_articles_cleaned]
-
-    # build the embeddings based on the chosen embedding
     embedded_original_article = embed_text(split_original_article)
-    embedded_found_articles = list(map(embed_text, split_found_articles))
+    sim_scores = []
 
-    sim = 0
-    if simtype == "cosine":
-        sim = [pairwise.cosine_similarity(embedded_original_article, embed_found_article) for embed_found_article in embedded_found_articles]
-    else:
-        sim = [pairwise.euclidean_distances(embedded_original_article, embed_found_article) for embed_found_article in embedded_found_articles]
+    for found_article in found_articles:
+      found_article_cleaned = normalize_corpus(found_article["article"], stopwords_removal=False, lan=found_article["language"],
+                                             stemming=False, remove_special_characters=True)
+      split_found_articles = split_text(found_article_cleaned, found_article["language"] )
+      embedded_found_aricle = embed_text(split_found_articles)
+      sim = 0
+      if simtype == "cosine":
+          sim = pairwise.cosine_similarity(embedded_original_article, embedded_found_aricle)
+      else:
+          sim = pairwise.euclidean_distances(embedded_original_article, embedded_found_aricle) 
+      df = convert_to_dataframe(embedded_original_article, embedded_found_aricle, sim)
+      high_avg_sim = highest_similarity(df)
+      sim_scores.append({"url": found_article["url"], "sim": str(high_avg_sim)})
 
-    # get the dataframes with the cartesian product of all sentences with corresponding similarities
-    df_embedded = [convert_to_dataframe(embedded_original_article, embedded_found_articles, sim) for embed_found_art in embedded_found_articles]
-    high_avg_sim = [highest_similarity(df) for df in df_embedded]
-
-    # join the similarity scores with the url's from the found articles
-    sim_scores = list(zip(articles_url, high_avg_sim))
     return sim_scores
-
 
 def convert_to_dataframe(embeddings_1, embeddings_2, sim) -> pd.DataFrame:
     """
@@ -127,7 +116,7 @@ def highest_similarity(dataframe: pd.DataFrame) -> np.ndarray:
         the average similarity from the highest similarity of the found article.
     """
     max_sim = []
-    for i in dataframe["index_sent_1_1"].unique():
-        max_sim.append(dataframe.loc[dataframe["index_sent_1_1"] == i, ["sim"]].max())
+    for i in dataframe["index_sent_1"].unique():
+        max_sim.append(dataframe.loc[dataframe["index_sent_1"] == i, ["sim"]].max())
     average_similarity = np.mean(max_sim)
     return average_similarity
