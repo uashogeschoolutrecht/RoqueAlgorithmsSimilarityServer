@@ -25,7 +25,6 @@ def get_similarity():
         Returns:
             string: the similarity score as a string, because flask doesnt want to return a float..
     """
-    print(request.form)
     # the parameters can be accessed through `request.form[{parameter name}]`
     original_article = {"article": request.form["original_article"],
                         "language": request.form["original_language"] if request.form[
