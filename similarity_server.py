@@ -30,7 +30,7 @@ def get_similarity():
                         "language": request.form["original_language"] if request.form[
                                                                              "original_language"] != "UNKOWN" else 'dutch'}
     found_articles = []
-    for article in json.loads(request.form.get("found_articles")):
+    for article in json.loads(request.form["found_articles"]):
       found_articles.append({
             "article": article["article"],
             "language": article["language"] if article["language"] and article["language"] != "UNKNOWN" else "dutch",
