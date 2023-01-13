@@ -14,4 +14,4 @@ EXPOSE 5000
 COPY . /app
 WORKDIR /app
 
-CMD ["gunicorn", "-w", "4","--timeout","100", "-b",  "0.0.0.0:8000", "similarity_server:app"]
+CMD ["gunicorn", "-w", "10","--timeout","100", "-b",  "0.0.0.0:8000", "similarity_server:app"]
