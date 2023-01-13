@@ -5,7 +5,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./nginx.conf: nginx.conf
+      - ./nginx.conf: /etc/nginx/conf.d/default.conf
   flask:
     mem_limit: 32212254720
     cpus: 3.8
