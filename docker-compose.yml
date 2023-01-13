@@ -1,8 +1,14 @@
 ﻿version: "3.9"
 services:
-  web:
-    build: .
+  nginx:
+    image: nginx
     ports:
       - "5000:5000"
+    volumes:
+      - ./nginx.conf: nginx.conf
+  flask:
+    build: .
+    ports:
+      - "8000:8000"
     volumes:
       - .:/code
