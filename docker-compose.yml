@@ -7,6 +7,8 @@ services:
     volumes:
       - ./nginx.conf: nginx.conf
   flask:
+    mem_limit: 32212254720
+    cpus: 3.8
     build: .
     ports:
       - "8000:8000"
